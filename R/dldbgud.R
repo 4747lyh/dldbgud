@@ -1,7 +1,7 @@
 FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NULL, 
                      DB_NAME = NULL, DB_PW = NULL, DB_TABLE = NULL, DB_RESET = NULL, 
                      FilePath = NULL, FileName = NULL, FileSep = NULL, FileDelete = NULL, 
-                     NumOnePack = NULL, NCore=NULL, DataOnR=NULL)
+                     NumOnePack = NULL, NCore=NULL)
 {
   list.of.packages = c("plyr", "dplyr", "sp", "rgdal", "RJDBC", 
                        "rJava", "stringr", "data.table", "doParallel", "foreach", 
@@ -23,11 +23,6 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                           locale = locale(encoding = guess_encoding(FileName)[1,1] %>% as.character))
     cat("\n Read Data Type : '.txt' ")
   }
-  if (!is.null(ExistOnR)) {
-    DATA_RAW = DataOnR
-    rm(DataOnR)
-    cat("\n Pass Reading Data Step because of existing data on R")
-  }
   
   DATA_RAW = data.frame(DATA_RAW)
   divide_section = NumOnePack
@@ -35,10 +30,13 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
               each = divide_section), rep(max(as.numeric(nrow(DATA_RAW) %/% divide_section)), 
                                           each = as.numeric(nrow(DATA_RAW) %% divide_section)))
   DATA_RAW$LYH_SEQ = seq
-  cat(paste0("\n SetWorkSpace : ", FilePath,
-             " \n\n             Query Into Oracle Pack : ", NumOnePack,
-             " \n\n             DB Table : ", paste0(DB_NAME,".", DB_TABLE),
-             " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2018-08-20 ver.2"))
+cat(paste0("\n SetWorkSpace : ", 6,
+           " \n\n             Query Into Oracle Pack : ", 6,
+           " \n\n             DB Table : ", paste0(6,".", 6),
+           " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2018-08-20 ver.2",
+           " \n\n             Detail : 1. DB업로드 시 문자 'NA' -> NULL 수정",
+           " \n\n                    : 2. DB업로드 시 숫자 지수승 수정",
+           " \n\n                    : 3. 코어수 입력 추가"))
   drv <- JDBC(driverClass = JDBC_driverClass, classPath = JDBC_classPath, "'")
   conn <- dbConnect(drv, DB_URL, DB_NAME, DB_PW)
   dbSendUpdate(conn, paste0("TRUNCATE TABLE ", paste0(DB_NAME,".", DB_TABLE)))
@@ -57,7 +55,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
   })
   registerDoParallel(cl)
   start = Sys.time()
-  cat(paste("\n Loop Start Time", start))
+  cat(paste("\n Loop Start Tim ", start))
   start_each = foreach(i = 1:max(DATA_RAW$LYH_SEQ), .packages = list.of.packages, .inorder = FALSE, .noexport = "conn") %dopar% {
     DATA = DATA_RAW %>% filter(LYH_SEQ == i) %>% select(-LYH_SEQ)
     db_write_table <- function(conn, table, df ) {
