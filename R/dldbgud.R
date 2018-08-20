@@ -68,8 +68,9 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
       table_name_list = dbGetQuery(conn, NAME)
       n = colnames(table_name_list)[colnames(table_name_list) %in% colnames(df)]
       df = df[, n]
-      batch <- apply(df, 1, FUN = function(x) paste0("'",trimws(x), "'", collapse = ","))
-      batch = str_sub(batch, 1, -11)
+      batch <- apply(df, 1, FUN = function(x) paste0("'",trimws(x),"'", collapse = ",")) %>%
+        paste0("SELECT ",.," FROM DUAL UNION ALL", collapse = " ")
+      batch=str_sub(batch,1,-11)
                query <- paste("INSERT INTO", paste0(table, "(",paste(n, collapse = ","), ")"), "\n", batch)
                dbSendUpdate(conn, query)
     }
