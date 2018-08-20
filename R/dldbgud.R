@@ -1,8 +1,7 @@
-
 FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NULL, 
-                    DB_NAME = NULL, DB_PW = NULL, DB_TABLE = NULL, DB_RESET = NULL, 
-                    FilePath = NULL, FileName = NULL, FileSep = NULL, FileDelete = NULL, 
-                    NumOnePack = NULL, NCore=NULL, DataOnR=NULL)
+                     DB_NAME = NULL, DB_PW = NULL, DB_TABLE = NULL, DB_RESET = NULL, 
+                     FilePath = NULL, FileName = NULL, FileSep = NULL, FileDelete = NULL, 
+                     NumOnePack = NULL, NCore=NULL, DataOnR=NULL)
 {
   list.of.packages = c("plyr", "dplyr", "sp", "rgdal", "RJDBC", 
                        "rJava", "stringr", "data.table", "doParallel", "foreach", 
@@ -69,13 +68,13 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
       table_name_list = dbGetQuery(conn, NAME)
       n = colnames(table_name_list)[colnames(table_name_list) %in% colnames(df)]
       df = df[, n]
-      batch <- apply(df, 1, FUN = function(x) paste0("'",trimws(x), "'", collapse = ",")) %>%
-        paste0("SELECT ",batch = str_sub(batch, 1, -11)
+      batch <- apply(df, 1, FUN = function(x) paste0("'",trimws(x), "'", collapse = ","))
+      batch = str_sub(batch, 1, -11)
                query <- paste("INSERT INTO", paste0(table, "(",paste(n, collapse = ","), ")"), "\n", batch)
                dbSendUpdate(conn, query)
     }
     db_write_table(conn, paste0(DB_NAME, ".", DB_TABLE),DATA, "", "")
-    }
+  }
   clusterEvalQ(cl, {
     dbDisconnect(conn)
   })
