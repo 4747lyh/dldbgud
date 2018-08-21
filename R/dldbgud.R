@@ -184,3 +184,16 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
   cat(paste("\n Loop Elapsed Time", Sys.time() - start))
   
 }
+
+pause = function(){
+  if (interactive())
+  {
+    invisible(readline(prompt = "Press <Enter> to continue..."))
+  }
+  else
+  {
+    cat("Press <Enter> to continue...")
+    invisible(readLines(file("stdin"), 1))
+  }
+}            
+                     
