@@ -56,7 +56,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                  
                  " \n\n             Detail : 1. DB업로드 시 문자 'NA' -> NULL 수정",
                  
-                 " \n\n                    : 2. DB업로드 시 숫자 지수승 수정",
+                 " \n\n                    : 2. DB업로드 시 숫자 '1000e+1' -> 10000 수정",
                  
                  " \n\n                    : 3. 코어수 입력 추가"))
     } 
@@ -129,7 +129,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
   
   start = Sys.time()
   
-  cat(paste("\n Loop Start Tim ", start))
+  cat(paste("\n Loop Start Time ", start))
   
   start_each = foreach(i = 1:max(DATA_RAW$LYH_SEQ), .packages = list.of.packages, .inorder = FALSE, .noexport = "conn") %dopar% {
     
