@@ -99,7 +99,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
   
   dbSendUpdate(conn, paste0("TRUNCATE TABLE ", paste0(DB_NAME,".", DB_TABLE)))
   
-  if(is.null(Ncore)){
+  if(is.null(NCore)){
     
     cl <- makeCluster(detectCores())
     
