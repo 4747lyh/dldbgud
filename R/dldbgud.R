@@ -58,25 +58,29 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                  
                  " \n\n                    : 2. DB업로드 시 숫자 '1000e+1' -> 10000 수정",
                  
-                 " \n\n                    : 3. 코어수 입력 추가"))
+                 " \n\n                    : 3. 코어수 입력 추가",
+                 
+                 " \n\n                    : 4. R상 로딩된 데이터 업로드(기존 파일 따로저장후 다시 불러오는 불편함)"))
     } 
   } else{
     DATA_RAW=DataOnR
     rm(DataOnR)
     cat("\n Pass Read Data ")
-    cat(paste0("\n SetWorkSpace : ", "On R",
-               
-               " \n\n             Query Into Oracle Pack : ", NumOnePack,
-               
-               " \n\n             DB Table : ", paste0(DB_NAME,".",DB_TABLE),
-               
-               " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2018-08-20 ver.2",
-               
-               " \n\n             Detail : 1. DB업로드 시 문자 'NA' -> NULL 수정",
-               
-               " \n\n                    : 2. DB업로드 시 숫자 지수승 수정",
-               
-               " \n\n                    : 3. 코어수 입력 추가"))
+      cat(paste0("\n SetWorkSpace : ", FilePath,
+                 
+                 " \n\n             Query Into Oracle Pack : ", NumOnePack,
+                 
+                 " \n\n             DB Table : ", paste0(DB_NAME,".",DB_TABLE),
+                 
+                 " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2018-08-20 ver.2",
+                 
+                 " \n\n             Detail : 1. DB업로드 시 문자 'NA' -> NULL 수정",
+                 
+                 " \n\n                    : 2. DB업로드 시 숫자 '1000e+1' -> 10000 수정",
+                 
+                 " \n\n                    : 3. 코어수 입력 추가",
+                 
+                 " \n\n                    : 4. R상 로딩된 데이터 업로드(기존 파일 따로저장후 다시 불러오는 불편함)"))
   }
   
   
