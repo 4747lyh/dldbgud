@@ -163,7 +163,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
       
     }
     
-    db_write_table(conn, paste0(DB_NAME, ".", DB_TABLE),DATA, "", "")
+    db_write_table(conn, paste0(DB_NAME, ".", DB_TABLE),DATA)
     
   }
   
