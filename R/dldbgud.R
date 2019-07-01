@@ -1,8 +1,8 @@
-FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NULL, 
+FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NULL,
                      
-                     DB_NAME = NULL, DB_PW = NULL, DB_TABLE = NULL, DB_RESET = NULL, 
+                     DB_NAME = NULL,  DB_ID = NULL, DB_PW = NULL, DB_TABLE = NULL, DB_RESET = FALSE, 
                      
-                     FilePath = NULL, FileName = NULL, FileSep = NULL, FileDelete = NULL, 
+                     FilePath = NULL, FileName = NULL, FileSep = NULL, FileDelete = FALSE, 
                      
                      NumOnePack = NULL, NCore = NULL, DataOnR = NULL)
   
@@ -52,7 +52,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                  
                  " \n\n             DB Table : ", paste0(DB_NAME,".",DB_TABLE),
                  
-                 " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2018-08-20 ver.2",
+                 " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2019-07-01 ver.3",
                  
                  " \n\n             Detail : 1. DB업로드 시 문자 'NA' -> NULL 수정",
                  
@@ -60,7 +60,9 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                  
                  " \n\n                    : 3. 코어수 입력 추가",
                  
-                 " \n\n                    : 4. R상 로딩된 데이터 업로드(기존 파일 따로저장후 다시 불러오는 불편함)"))
+                 " \n\n                    : 4. R상 로딩된 데이터 업로드(기존 파일 따로저장후 다시 불러오는 불편함)",
+                 
+                 " \n\n                    : 5. DB_ID 추가, 기존 DB_NAME이랑 혼동 (ver.3)"))
     } 
   } else{
     DATA_RAW=DataOnR
@@ -72,7 +74,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                  
                  " \n\n             DB Table : ", paste0(DB_NAME,".",DB_TABLE),
                  
-                 " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2018-08-20 ver.2",
+                 " \n\n             Mode : UNION ALL \n\n             Maker : YuHyungLee 2019-07-01 ver.3",
                  
                  " \n\n             Detail : 1. DB업로드 시 문자 'NA' -> NULL 수정",
                  
@@ -80,8 +82,10 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                  
                  " \n\n                    : 3. 코어수 입력 추가",
                  
-                 " \n\n                    : 4. R상 로딩된 데이터 업로드(기존 파일 따로저장후 다시 불러오는 불편함)"))
-  }
+                 " \n\n                    : 4. R상 로딩된 데이터 업로드(기존 파일 따로저장후 다시 불러오는 불편함)",
+                 
+                 " \n\n                    : 5. DB_ID 추가, 기존 DB_NAME이랑 혼동 (ver.3)"))
+    } 
   
   
   DATA_RAW = data.frame(DATA_RAW)
@@ -99,9 +103,11 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
 
   drv <- JDBC(driverClass = JDBC_driverClass, classPath = JDBC_classPath, "'")
   
-  conn <- dbConnect(drv, DB_URL, DB_NAME, DB_PW)
+  conn <- dbConnect(drv, DB_URL, DB_ID, DB_PW)
   
-  dbSendUpdate(conn, paste0("TRUNCATE TABLE ", paste0(DB_NAME,".", DB_TABLE)))
+  if(DB_RESET){
+    dbSendUpdate(conn, paste0("TRUNCATE TABLE ", paste0(DB_NAME,".", DB_TABLE)))
+    }
   
   if(is.null(NCore)){
     
@@ -123,7 +129,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
                 
                 "'")
     
-    conn <- dbConnect(drv, DB_URL, DB_NAME, DB_PW)
+    conn <- dbConnect(drv, DB_URL, DB_ID, DB_PW)
     
     options(scipen = 999)
     
@@ -179,7 +185,7 @@ FiletoORC<-function (JDBC_driverClass = NULL, JDBC_classPath = NULL, DB_URL = NU
   
   stopCluster(cl)
   
-  if (FileDelete == 1) {
+  if (FileDelete) {
     
     file.remove(data_name)
     
