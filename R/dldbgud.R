@@ -155,7 +155,7 @@ DataFrameToORC = function (
   
   
   
-  conn <- dbConnect(drv, URL, Id, Pw)
+  conn <- dbConnect(drv, Url, Id, Pw)
   
   
   
